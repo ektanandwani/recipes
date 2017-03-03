@@ -279,7 +279,7 @@ static gboolean
 import_recipe (GrRecipeImporter *importer)
 {
         GrRecipeStore *store;
-        g_autoptr(GArray) images = NULL;
+        g_autoptr(GPtrArray) images = NULL;
         g_autoptr(GrRecipe) recipe = NULL;
         g_autoptr(GError) error = NULL;
         g_autofree char *id = NULL;
@@ -291,7 +291,7 @@ import_recipe (GrRecipeImporter *importer)
         if (importer->recipe_paths) {
                 int i;
                 for (i = 0; importer->recipe_paths[i]; i++) {
-                        GrImage ri;
+                        GrImage *ri;
                         char *new_path;
 
                         if (!copy_image (importer, importer->recipe_paths[i], &new_path, &error)) {
@@ -299,8 +299,9 @@ import_recipe (GrRecipeImporter *importer)
                                 return FALSE;
                         }
 
-                        ri.path = new_path;
-                        g_array_append_val (images, ri);
+                        ri = g_new (GrImage, 1);
+                        ri->path = new_path;
+                        g_ptr_array_add (images, ri);
                 }
         }
 

@@ -39,7 +39,7 @@ struct _GrRecipe
         char *name;
         char *author;
         char *description;
-        GArray *images;
+        GPtrArray *images;
         int default_image;
 
         char *cuisine;
@@ -118,7 +118,7 @@ gr_recipe_finalize (GObject *object)
         g_free (self->ingredients);
         g_free (self->instructions);
         g_free (self->notes);
-        g_array_free (self->images, TRUE);
+        g_ptr_array_unref (self->images);
 
         g_free (self->cf_name);
         g_free (self->cf_description);
@@ -232,23 +232,6 @@ gr_recipe_get_property (GObject    *object,
         }
 }
 
-static void
-set_images (GrRecipe *self,
-            GArray   *images)
-{
-        int i;
-
-        g_array_remove_range (self->images, 0, self->images->len);
-        for (i = 0; i < images->len; i++) {
-                GrImage *ri = &g_array_index (images, GrImage, i);
-                g_array_append_vals (self->images, ri, 1);
-                ri = &g_array_index (self->images, GrImage, i);
-                ri->path = g_strdup (ri->path);
-        }
-
-        g_object_notify (G_OBJECT (self), "images");
-}
-
 static char *
 gr_recipe_get_chef_fullname (GrRecipe *self)
 {
@@ -314,7 +297,9 @@ gr_recipe_set_property (GObject      *object,
                 break;
 
         case PROP_IMAGES:
-                set_images (self, (GArray *) g_value_get_boxed (value));
+                if (self->images)
+                        g_ptr_array_unref (self->images);
+                self->images = g_ptr_array_ref ((GPtrArray *) g_value_get_boxed (value));
                 break;
 
         case PROP_DEFAULT_IMAGE:
@@ -704,6 +689,12 @@ gboolean
 gr_recipe_is_contributed (GrRecipe *recipe)
 {
         return recipe->contributed;
+}
+
+GPtrArray *
+gr_recipe_get_images (GrRecipe *recipe)
+{
+        return recipe->images;
 }
 
 /* terms are assumed to be g_utf8_casefold'ed where appropriate */

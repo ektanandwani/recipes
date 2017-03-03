@@ -77,7 +77,7 @@ void            gr_window_set_fullscreen             (GrWindow   *window,
                                                       gboolean    fullscreen);
 
 void            gr_window_show_image                 (GrWindow   *window,
-                                                      GArray     *images,
+                                                      GPtrArray  *images,
                                                       int         index);
 
 void            gr_window_offer_shopping             (GrWindow   *window);

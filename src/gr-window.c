@@ -1121,9 +1121,9 @@ gr_window_show_search_by_ingredients (GrWindow   *window,
 }
 
 void
-gr_window_show_image (GrWindow *window,
-                      GArray   *images,
-                      int       index)
+gr_window_show_image (GrWindow  *window,
+                      GPtrArray *images,
+                      int        index)
 {
         if (images && images->len > 0) {
                 gr_image_page_set_images (GR_IMAGE_PAGE (window->image_page), images);

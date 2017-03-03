@@ -152,8 +152,7 @@ load_recipes (GrRecipeStore *self,
                 int spiciness;
                 int default_image = 0;
                 GrDiets diets;
-                g_autoptr(GArray) images = NULL;
-                GrImage ri;
+                g_autoptr(GPtrArray) images = NULL;
                 g_autoptr(GDateTime) ctime = NULL;
                 g_autoptr(GDateTime) mtime = NULL;
                 char *tmp;
@@ -305,8 +304,11 @@ load_recipes (GrRecipeStore *self,
                 images = gr_image_array_new ();
                 if (paths) {
                         for (j = 0; paths[j]; j++) {
-                                ri.path = g_strdup (paths[j]);
-                                g_array_append_val (images, ri);
+                                GrImage *ri;
+
+                                ri = g_new (GrImage, 1);
+                                ri->path = g_strdup (paths[j]);
+                                g_ptr_array_add (images, ri);
                         }
                 }
 
@@ -446,7 +448,7 @@ save_recipes (GrRecipeStore *self)
                 const char *ingredients;
                 const char *instructions;
                 const char *notes;
-                g_autoptr(GArray) images = NULL;
+                g_autoptr(GPtrArray) images = NULL;
                 int serves;
                 int spiciness;
                 GrDiets diets;
@@ -483,7 +485,7 @@ save_recipes (GrRecipeStore *self)
 
                 paths = g_new0 (char *, images->len + 1);
                 for (i = 0; i < images->len; i++) {
-                        GrImage *ri = &g_array_index (images, GrImage, i);
+                        GrImage *ri = g_ptr_array_index (images, i);
                         if (g_str_has_prefix (ri->path, dir))
                                 paths[i] = g_strdup (ri->path + strlen (dir) + 1);
                         else
