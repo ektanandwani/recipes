@@ -27,7 +27,7 @@
 #include "gr-recipe-small-tile.h"
 #include "gr-window.h"
 #include "gr-utils.h"
-#include "gr-images.h"
+#include "gr-image.h"
 
 
 struct _GrRecipeSmallTile

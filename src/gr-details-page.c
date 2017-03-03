@@ -34,7 +34,7 @@
 #include "gr-app.h"
 #include "gr-window.h"
 #include "gr-utils.h"
-#include "gr-images.h"
+#include "gr-image.h"
 #include "gr-image-viewer.h"
 #include "gr-ingredients-list.h"
 #include "gr-timer.h"

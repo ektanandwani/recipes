@@ -24,7 +24,7 @@
 
 #include "gr-recipe-printer.h"
 #include "gr-ingredients-list.h"
-#include "gr-images.h"
+#include "gr-image.h"
 #include "gr-chef.h"
 #include "gr-recipe-store.h"
 #include "gr-app.h"

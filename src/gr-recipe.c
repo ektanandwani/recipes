@@ -26,7 +26,7 @@
 #include <gtk/gtk.h>
 
 #include "gr-recipe.h"
-#include "gr-images.h"
+#include "gr-image.h"
 #include "gr-utils.h"
 #include "gr-app.h"
 #include "types.h"
