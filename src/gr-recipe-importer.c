@@ -299,8 +299,7 @@ import_recipe (GrRecipeImporter *importer)
                                 return FALSE;
                         }
 
-                        ri = g_new (GrImage, 1);
-                        ri->path = new_path;
+                        ri = gr_image_new (new_path);
                         g_ptr_array_add (images, ri);
                 }
         }

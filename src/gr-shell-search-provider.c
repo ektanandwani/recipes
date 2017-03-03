@@ -166,15 +166,14 @@ handle_get_subsearch_result_set (GrShellSearchProvider2  *skeleton,
 static GdkPixbuf *
 gr_recipe_get_pixbuf (GrRecipe *recipe)
 {
-        g_autoptr(GArray) images = NULL;
+        GPtrArray *images;
 
-        g_object_get (recipe, "images", &images, NULL);
-
+        images = gr_recipe_get_images (recipe);
         if (images->len > 0) {
-                GrImage *ri = &g_array_index (images, GrImage, 0);
+                GrImage *ri = g_ptr_array_index (images, 0);
                 GdkPixbuf *pixbuf;
 
-                pixbuf = load_pixbuf_fill_size (ri->path, 64, 64);
+                pixbuf = load_pixbuf_fill_size (gr_image_get_path (ri), 64, 64);
                 return pixbuf;
         }
 
