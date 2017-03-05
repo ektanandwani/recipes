@@ -41,6 +41,7 @@ struct _GrApp
         GtkApplication parent_instance;
 
         GrRecipeStore *store;
+        SoupSession *session;
         GrShellSearchProvider *search_provider;
         GrRecipeExporter *exporter;
 
@@ -55,6 +56,7 @@ gr_app_finalize (GObject *object)
 {
         GrApp *self = GR_APP (object);
 
+        g_clear_object (&self->session);
         g_clear_object (&self->store);
         g_clear_object (&self->search_provider);
         g_clear_object (&self->css_provider);
@@ -387,7 +389,7 @@ gr_app_dbus_register (GApplication    *application,
         GrApp *app = GR_APP (application);
 
         app->search_provider = gr_shell_search_provider_new ();
-        gr_shell_search_provider_setup (app->search_provider, app->store);
+        gr_shell_search_provider_setup (app->search_provider, gr_app_get_recipe_store (app));
 
         return gr_shell_search_provider_register (app->search_provider, connection, error);
 }
@@ -419,8 +421,9 @@ gr_app_init (GrApp *self)
 
         g_log_set_writer_func (log_writer, NULL, NULL);
 
-        self->store = gr_recipe_store_new ();
-
+        self->session = soup_session_new_with_options (SOUP_SESSION_USER_AGENT,
+                                                       PACKAGE_NAME "/" PACKAGE_VERSION,
+                                                       NULL);
 }
 
 static int
@@ -478,5 +481,14 @@ gr_app_new (void)
 GrRecipeStore *
 gr_app_get_recipe_store (GrApp *app)
 {
+        if (!app->store)
+                app->store = gr_recipe_store_new ();
+
         return app->store;
+}
+
+SoupSession *
+gr_app_get_soup_session (GrApp *app)
+{
+        return app->session;
 }
