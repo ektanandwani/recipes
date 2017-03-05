@@ -299,7 +299,8 @@ import_recipe (GrRecipeImporter *importer)
                                 return FALSE;
                         }
 
-                        ri = gr_image_new (new_path);
+                        ri = gr_image_new (gr_app_get_soup_session (GR_APP (g_application_get_default ())), new_path);
+
                         g_ptr_array_add (images, ri);
                 }
         }

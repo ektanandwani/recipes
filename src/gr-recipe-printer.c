@@ -184,7 +184,7 @@ begin_print (GtkPrintOperation *operation,
         if (images && images->len > 0) {
                 GrImage *ri;
                 ri = g_ptr_array_index (images, 0);
-                printer->image = load_pixbuf_fit_size (gr_image_get_path (ri), width / 2, height / 4, FALSE);
+                printer->image = gr_image_load_sync (ri, width / 2, height / 4, TRUE);
         }
 
         title_font = pango_font_description_from_string ("Cantarell Bold 18");
